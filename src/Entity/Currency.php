@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CurrencyRepository::class)]
-#[ORM\HasLifecycleCallbacks()]
+#[ORM\HasLifecycleCallbacks]
 class Currency
 {
     #[ORM\Id]
@@ -28,15 +28,12 @@ class Currency
     #[ORM\Column(nullable: true)]
     private ?\DateTime $updatedAt = null;
 
-    #[ORM\ManyToMany(targetEntity: CurrencyPair::class, mappedBy: 'currencyFrom')]
-    private Collection $currencyPairsFrom;
-
-    #[ORM\ManyToMany(targetEntity: CurrencyPair::class, mappedBy: 'currencyTo')]
-    private Collection $currencyPairsTo;
+    #[ORM\OneToMany(mappedBy: 'currencyFrom', targetEntity: CurrencyPare::class, orphanRemoval: true)]
+    private Collection $currencyPares;
 
     public function __construct()
     {
-        $this->currencyPairs = new ArrayCollection();
+        $this->currencyPares = new ArrayCollection();
     }
 
     public function getId(): int
@@ -105,27 +102,30 @@ class Currency
     }
 
     /**
-     * @return Collection<int, CurrencyPair>
+     * @return Collection<int, CurrencyPare>
      */
-    public function getCurrencyPairs(): Collection
+    public function getCurrencyPares(): Collection
     {
-        return $this->currencyPairs;
+        return $this->currencyPares;
     }
 
-    public function addCurrencyPair(CurrencyPair $currencyPair): static
+    public function addCurrencyPare(CurrencyPare $currencyPare): static
     {
-        if (!$this->currencyPairs->contains($currencyPair)) {
-            $this->currencyPairs->add($currencyPair);
-            $currencyPair->addCurrencyFrom($this);
+        if (!$this->currencyPares->contains($currencyPare)) {
+            $this->currencyPares->add($currencyPare);
+            $currencyPare->setCurrencyFrom($this);
         }
 
         return $this;
     }
 
-    public function removeCurrencyPair(CurrencyPair $currencyPair): static
+    public function removeCurrencyPare(CurrencyPare $currencyPare): static
     {
-        if ($this->currencyPairs->removeElement($currencyPair)) {
-            $currencyPair->removeCurrencyFrom($this);
+        if ($this->currencyPares->removeElement($currencyPare)) {
+            // set the owning side to null (unless already changed)
+            if ($currencyPare->getCurrencyFrom() === $this) {
+                $currencyPare->setCurrencyFrom(null);
+            }
         }
 
         return $this;
