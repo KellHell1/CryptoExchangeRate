@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'GetCurrentRatesCommand',
+    name: 'app:get-current-rates-command',
     description: 'Get current rates and save in DB',
 )]
 class GetCurrentRatesCommand extends Command
