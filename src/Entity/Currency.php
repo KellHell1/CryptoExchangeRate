@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CurrencyRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CurrencyRepository::class)]
@@ -25,6 +27,17 @@ class Currency
 
     #[ORM\Column(nullable: true)]
     private ?\DateTime $updatedAt = null;
+
+    #[ORM\ManyToMany(targetEntity: CurrencyPair::class, mappedBy: 'currencyFrom')]
+    private Collection $currencyPairsFrom;
+
+    #[ORM\ManyToMany(targetEntity: CurrencyPair::class, mappedBy: 'currencyTo')]
+    private Collection $currencyPairsTo;
+
+    public function __construct()
+    {
+        $this->currencyPairs = new ArrayCollection();
+    }
 
     public function getId(): int
     {
@@ -89,5 +102,32 @@ class Currency
     public function onPreUpdate(): void
     {
         $this->updatedAt = new \DateTime("now");
+    }
+
+    /**
+     * @return Collection<int, CurrencyPair>
+     */
+    public function getCurrencyPairs(): Collection
+    {
+        return $this->currencyPairs;
+    }
+
+    public function addCurrencyPair(CurrencyPair $currencyPair): static
+    {
+        if (!$this->currencyPairs->contains($currencyPair)) {
+            $this->currencyPairs->add($currencyPair);
+            $currencyPair->addCurrencyFrom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCurrencyPair(CurrencyPair $currencyPair): static
+    {
+        if ($this->currencyPairs->removeElement($currencyPair)) {
+            $currencyPair->removeCurrencyFrom($this);
+        }
+
+        return $this;
     }
 }
