@@ -28,12 +28,12 @@ class Currency
     #[ORM\Column(nullable: true)]
     private ?\DateTime $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'currencyFrom', targetEntity: CurrencyPare::class, orphanRemoval: true)]
-    private Collection $currencyPares;
+    #[ORM\OneToMany(mappedBy: 'currencyFrom', targetEntity: CurrencyPair::class, orphanRemoval: true)]
+    private Collection $currencyPairs;
 
     public function __construct()
     {
-        $this->currencyPares = new ArrayCollection();
+        $this->currencyPairs = new ArrayCollection();
     }
 
     public function getId(): int
@@ -102,29 +102,29 @@ class Currency
     }
 
     /**
-     * @return Collection<int, CurrencyPare>
+     * @return Collection<int, CurrencyPair>
      */
-    public function getCurrencyPares(): Collection
+    public function getCurrencyPairs(): Collection
     {
-        return $this->currencyPares;
+        return $this->currencyPairs;
     }
 
-    public function addCurrencyPare(CurrencyPare $currencyPare): static
+    public function addCurrencyPair(CurrencyPair $currencyPair): static
     {
-        if (!$this->currencyPares->contains($currencyPare)) {
-            $this->currencyPares->add($currencyPare);
-            $currencyPare->setCurrencyFrom($this);
+        if (!$this->currencyPairs->contains($currencyPair)) {
+            $this->currencyPairs->add($currencyPair);
+            $currencyPair->setCurrencyFrom($this);
         }
 
         return $this;
     }
 
-    public function removeCurrencyPare(CurrencyPare $currencyPare): static
+    public function removeCurrencyPair(CurrencyPair $currencyPair): static
     {
-        if ($this->currencyPares->removeElement($currencyPare)) {
+        if ($this->currencyPairs->removeElement($currencyPair)) {
             // set the owning side to null (unless already changed)
-            if ($currencyPare->getCurrencyFrom() === $this) {
-                $currencyPare->setCurrencyFrom(null);
+            if ($currencyPair->getCurrencyFrom() === $this) {
+                $currencyPair->setCurrencyFrom(null);
             }
         }
 

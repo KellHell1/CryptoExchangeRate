@@ -2,23 +2,23 @@
 
 namespace App\Entity;
 
-use App\Repository\CurrencyPareRepository;
+use App\Repository\CurrencyPairRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CurrencyPareRepository::class)]
+#[ORM\Entity(repositoryClass: CurrencyPairRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class CurrencyPare
+class CurrencyPair
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'currencyPares')]
+    #[ORM\ManyToOne(inversedBy: 'currencyPairs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Currency $currencyFrom = null;
 
-    #[ORM\ManyToOne(inversedBy: 'currencyPares')]
+    #[ORM\ManyToOne(inversedBy: 'currencyPairs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Currency $currencyTo = null;
 
