@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CurrencyPairRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CurrencyPairRepository::class)]
@@ -28,6 +30,14 @@ class CurrencyPair
     #[ORM\Column(nullable: true)]
     private ?\DateTime $updatedAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'currencyPair', targetEntity: RateHistory::class, orphanRemoval: true)]
+    private Collection $rateHistories;
+
+    public function __construct()
+    {
+        $this->rateHistories = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -38,7 +48,7 @@ class CurrencyPair
         return $this->currencyFrom;
     }
 
-    public function setCurrencyFrom(?Currency $currencyFrom): static
+    public function setCurrencyFrom(?Currency $currencyFrom): self
     {
         $this->currencyFrom = $currencyFrom;
 
@@ -50,7 +60,7 @@ class CurrencyPair
         return $this->currencyTo;
     }
 
-    public function setCurrencyTo(?Currency $currencyTo): static
+    public function setCurrencyTo(?Currency $currencyTo): self
     {
         $this->currencyTo = $currencyTo;
 
@@ -62,7 +72,7 @@ class CurrencyPair
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): static
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -74,7 +84,7 @@ class CurrencyPair
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt): static
+    public function setUpdatedAt(?\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -91,5 +101,35 @@ class CurrencyPair
     public function onPreUpdate(): void
     {
         $this->updatedAt = new \DateTime("now");
+    }
+
+    /**
+     * @return Collection<int, RateHistory>
+     */
+    public function getRateHistories(): Collection
+    {
+        return $this->rateHistories;
+    }
+
+    public function addRateHistory(RateHistory $rateHistory): self
+    {
+        if (!$this->rateHistories->contains($rateHistory)) {
+            $this->rateHistories->add($rateHistory);
+            $rateHistory->setCurrencyPair($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRateHistory(RateHistory $rateHistory): self
+    {
+        if ($this->rateHistories->removeElement($rateHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($rateHistory->getCurrencyPair() === $this) {
+                $rateHistory->setCurrencyPair(null);
+            }
+        }
+
+        return $this;
     }
 }
