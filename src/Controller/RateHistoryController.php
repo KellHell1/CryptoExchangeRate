@@ -23,6 +23,7 @@ class RateHistoryController extends AbstractController
         $dateFrom =  new DateTime($request->get('dateFrom'));
         $dateTo = new DateTime($request->get('dateTo'));
 
+        // если предполагается что история не будет отображаться вся сразу в определенных кейсах, то еще делаем пагинацию
         $history = $this->rateHistoryService->getRateHistoryByDates($currencyPairId, $dateFrom, $dateTo);
 
         return new JsonResponse(
