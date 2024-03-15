@@ -9,14 +9,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RateHistoryController extends AbstractController
 {
-    //private RateHistoryService $rateHistoryService;
-
     public function __construct(
         private RateHistoryService $rateHistoryService,
-    )
-    {
-        // TODO: переделать через ДИ
-        $this->rateHistoryService = $rateHistoryService;
+    ) {
+
     }
 
     #[Route('/rate/history', name: 'app_rate_history', methods: ['GET'])]

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\CurrencyPair;
 use App\Entity\RateHistory;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -18,13 +19,10 @@ class RateHistoryService
         private HttpClientInterface $client,
         private string $getRateUrl,
         private string $apiKey,
-        //private array $query,
     ) {
         $this->getRateUrl = $_ENV['COIN_API_GET_RATE_URL'];
         $this->apiKey = $_ENV['COIN_API_KEY'];
-        $this->query = [
-            'apikey' => $this->apiKey
-        ];
+        $this->query = ['query' => ['apikey' => $this->apiKey]];
     }
 
 
@@ -33,7 +31,7 @@ class RateHistoryService
         try {
             $response = $this->client->request(
                 $method,
-                $url . $this->apiKey,
+                $url,
                 $options
             );
         } catch (TransportExceptionInterface $e) {
@@ -58,7 +56,9 @@ class RateHistoryService
 
         $rateHistory->setRate($response['rate']);
         $rateHistory->setCurrencyPair($currencyPair);
-        $rateHistory->setDatetime($response['time']);
+
+        $dateTime = new DateTime($response['time']);
+        $rateHistory->setDatetime($dateTime);
 
         $this->entityManager->persist($rateHistory);
         $this->entityManager->flush($rateHistory);
