@@ -43,7 +43,7 @@ class RateHistory
 
     public function getRate(): ?float
     {
-        return $this->rate;
+        return (float)$this->rate;
     }
 
     public function setRate(float $rate): self
