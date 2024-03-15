@@ -9,18 +9,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RateHistoryController extends AbstractController
 {
+    //private RateHistoryService $rateHistoryService;
+
     public function __construct(
         private RateHistoryService $rateHistoryService,
     )
     {
         // TODO: переделать через ДИ
-        $this->rateHistoryService = new RateHistoryService();
+        $this->rateHistoryService = $rateHistoryService;
     }
 
     #[Route('/rate/history', name: 'app_rate_history', methods: ['GET'])]
     public function getRateHistory(int $currencyPairId, \DateTime $dateFrom, \DateTime $dateTo): JsonResponse
     {
-        $history = $this->rateHistoryService->getRateHistory($currencyPairId, $dateFrom, $dateTo);
+        $history = $this->rateHistoryService->getRateHistoryByDates($currencyPairId, $dateFrom, $dateTo);
 
         return new JsonResponse([
             $history
