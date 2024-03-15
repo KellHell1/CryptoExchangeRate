@@ -24,6 +24,7 @@ class GetCurrentRatesCommand extends Command
         parent::__construct();
     }
 
+    // команда создана что б ее запускали по крону каждый час
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

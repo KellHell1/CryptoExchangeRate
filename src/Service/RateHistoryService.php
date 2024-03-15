@@ -74,7 +74,7 @@ class RateHistoryService
         $rateHistory = $this->entityManager->getRepository(RateHistory::class)->findByDateTimeRangeAndPair($currencyPair, $dateFrom, $dateTo);
 
         foreach ($rateHistory as $item) {
-            // для графика важен только час, убрал минуты с секундами
+            // для графика важно день+час, убрал минуты с секундами
             $history[] = [$item->getDatetime()->format('Y-m-d H') => $item->getRate()];
         }
 
