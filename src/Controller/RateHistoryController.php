@@ -25,6 +25,14 @@ class RateHistoryController extends AbstractController
 
         $history = $this->rateHistoryService->getRateHistoryByDates($currencyPairId, $dateFrom, $dateTo);
 
-        return new JsonResponse($history);
+        return new JsonResponse(
+            [
+                'currencyPairId' => $currencyPairId,
+                'history' => $history,
+                'items' => count($history),
+                'dateFrom' => $dateFrom,
+                'dateTo' => $dateTo,
+            ]
+        );
     }
 }

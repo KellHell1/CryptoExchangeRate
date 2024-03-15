@@ -67,7 +67,7 @@ class RateHistoryService
     }
 
 
-    public function getRateHistoryByDates(int $currencyPairId, \DateTime $dateFrom, \DateTime $dateTo): array
+    public function getRateHistoryByDates(int $currencyPairId, DateTime $dateFrom, DateTime $dateTo): array
     {
         $currencyPair = $this->entityManager->getRepository(CurrencyPair::class)->find($currencyPairId)
             ?? throw new NotFoundHttpException();
