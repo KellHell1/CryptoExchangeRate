@@ -73,7 +73,7 @@ class RateHistoryService
             ?? throw new NotFoundHttpException();
 
         $history = [];
-        $rateHistory = $this->entityManager->getRepository(RateHistory::class)->findBy(['currencyPair' => $currencyPair]);
+        $rateHistory = $this->entityManager->getRepository(RateHistory::class)->findByDateTimeRangeAndPair($currencyPair, $dateFrom, $dateTo);
 
         foreach ($rateHistory as $item) {
             $history[] = [$item->getDatetime()->format('Y-m-d H:i') => $item->getRate()];
