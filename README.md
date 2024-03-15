@@ -1,3 +1,7 @@
+ Делаем енв по подобию .env.example
+
+    cp .env.example .env
+
 Run:
 
     1.Docker, docker-compose and git are required

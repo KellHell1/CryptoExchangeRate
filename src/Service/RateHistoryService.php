@@ -12,7 +12,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class RateHistoryService
 {
-    private $query;
+    private array $query;
 
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -20,13 +20,11 @@ class RateHistoryService
         private string $getRateUrl,
         private string $apiKey,
     ) {
-        $this->getRateUrl = $_ENV['COIN_API_GET_RATE_URL'];
-        $this->apiKey = $_ENV['COIN_API_KEY'];
         $this->query = ['query' => ['apikey' => $this->apiKey]];
     }
 
 
-    private function sendRequest($url, $options, $method = 'GET')
+    private function sendRequest($url, $options, $method = 'GET'): array
     {
         try {
             $response = $this->client->request(
@@ -61,7 +59,7 @@ class RateHistoryService
         $rateHistory->setDatetime($dateTime);
 
         $this->entityManager->persist($rateHistory);
-        $this->entityManager->flush($rateHistory);
+        $this->entityManager->flush();
 
         return $rateHistory;
     }
@@ -76,7 +74,8 @@ class RateHistoryService
         $rateHistory = $this->entityManager->getRepository(RateHistory::class)->findByDateTimeRangeAndPair($currencyPair, $dateFrom, $dateTo);
 
         foreach ($rateHistory as $item) {
-            $history[] = [$item->getDatetime()->format('Y-m-d H:i') => $item->getRate()];
+            // для графика важен только час, убрал минуты с секундами
+            $history[] = [$item->getDatetime()->format('Y-m-d H') => $item->getRate()];
         }
 
         return $history;
