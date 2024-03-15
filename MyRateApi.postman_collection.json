@@ -1,0 +1,50 @@
+{
+	"info": {
+		"_postman_id": "518b3d9f-be1e-42c2-84fe-22892e985878",
+		"name": "MyRateApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "23522055"
+	},
+	"item": [
+		{
+			"name": "GetRatesHistoryByDates",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8080/rate/history/1?dateFrom=2022-01-03 22:00&dateTo=2025-05-05 22:00",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"rate",
+						"history",
+						"1"
+					],
+					"query": [
+						{
+							"key": "dateFrom",
+							"value": "2022-01-03 22:00"
+						},
+						{
+							"key": "dateTo",
+							"value": "2025-05-05 22:00"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
