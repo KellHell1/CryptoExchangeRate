@@ -67,6 +67,7 @@ class RateHistoryService
 
     public function getRateHistoryByDates(int $currencyPairId, DateTime $dateFrom, DateTime $dateTo): array
     {
+        // тут с фронтом надо согласовать как выкидывать лучше в случае NotFound
         $currencyPair = $this->entityManager->getRepository(CurrencyPair::class)->find($currencyPairId)
             ?? throw new NotFoundHttpException();
 
@@ -75,6 +76,7 @@ class RateHistoryService
 
         foreach ($rateHistory as $item) {
             // для графика важно день+час, убрал минуты с секундами
+            // так же можно было б добавить к каждому шагу, процентное соотношение повышения или понижения цены от предыдущей, если фронт не будет это делать сам
             $history[] = [$item->getDatetime()->format('Y-m-d H') => $item->getRate()];
         }
 
