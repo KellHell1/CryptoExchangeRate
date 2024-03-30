@@ -18,12 +18,12 @@ class CurrencyPair
     #[ORM\Column]
     private int $id;
 
-    #[ORM\ManyToOne(inversedBy: 'currencyPairs')]
-    #[JoinColumn(name: "code", referencedColumnName: "code", nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Currency::class, inversedBy: 'currencyPairsFrom')]
+    #[JoinColumn(name: "currency_from_code", referencedColumnName: "code", nullable: false)]
     private Currency $currencyFrom;
 
-    #[ORM\ManyToOne(inversedBy: 'currencyPairs')]
-    #[JoinColumn(name: "code", referencedColumnName: "code", nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Currency::class, inversedBy: 'currencyPairsTo')]
+    #[JoinColumn(name: "currency_to_code", referencedColumnName: "code", nullable: false)]
     private Currency $currencyTo;
 
     #[ORM\Column]
