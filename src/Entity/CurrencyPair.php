@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 #[ORM\Entity(repositoryClass: CurrencyPairRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -18,11 +19,11 @@ class CurrencyPair
     private int $id;
 
     #[ORM\ManyToOne(inversedBy: 'currencyPairs')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[JoinColumn(name: "code", referencedColumnName: "code", nullable: false)]
     private Currency $currencyFrom;
 
     #[ORM\ManyToOne(inversedBy: 'currencyPairs')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[JoinColumn(name: "code", referencedColumnName: "code", nullable: false)]
     private Currency $currencyTo;
 
     #[ORM\Column]
@@ -71,13 +72,6 @@ class CurrencyPair
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
-    }
-
-    public function setCreatedAt(DateTime $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 
     public function getUpdatedAt(): ?DateTime

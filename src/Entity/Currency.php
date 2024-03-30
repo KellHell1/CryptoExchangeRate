@@ -7,19 +7,18 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[ORM\Entity(repositoryClass: CurrencyRepository::class)]
+#[UniqueConstraint(name: "code", columns: ["code"])]
 #[ORM\HasLifecycleCallbacks]
 class Currency
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private int $id;
-
     #[ORM\Column(length: 255)]
     private string $title;
 
+    #[Id]
     #[ORM\Column(length: 255)]
     private string $code;
 
@@ -35,11 +34,6 @@ class Currency
     public function __construct()
     {
         $this->currencyPairs = new ArrayCollection();
-    }
-
-    public function getId(): int
-    {
-        return $this->id;
     }
 
     public function getTitle(): string
