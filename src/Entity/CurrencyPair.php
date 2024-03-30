@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CurrencyPairRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,21 +15,21 @@ class CurrencyPair
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\ManyToOne(inversedBy: 'currencyPairs')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Currency $currencyFrom = null;
+    private Currency $currencyFrom;
 
     #[ORM\ManyToOne(inversedBy: 'currencyPairs')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Currency $currencyTo = null;
+    private Currency $currencyTo;
 
     #[ORM\Column]
-    private ?\DateTime $createdAt = null;
+    private DateTime $createdAt;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTime $updatedAt = null;
+    private ?DateTime $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'currencyPair', targetEntity: RateHistory::class, orphanRemoval: true)]
     private Collection $rateHistories;
@@ -38,53 +39,53 @@ class CurrencyPair
         $this->rateHistories = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getCurrencyFrom(): ?Currency
+    public function getCurrencyFrom(): Currency
     {
         return $this->currencyFrom;
     }
 
-    public function setCurrencyFrom(?Currency $currencyFrom): self
+    public function setCurrencyFrom(Currency $currencyFrom): self
     {
         $this->currencyFrom = $currencyFrom;
 
         return $this;
     }
 
-    public function getCurrencyTo(): ?Currency
+    public function getCurrencyTo(): Currency
     {
         return $this->currencyTo;
     }
 
-    public function setCurrencyTo(?Currency $currencyTo): self
+    public function setCurrencyTo(Currency $currencyTo): self
     {
         $this->currencyTo = $currencyTo;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt): self
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -94,13 +95,13 @@ class CurrencyPair
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
-        $this->createdAt = new \DateTime("now");
+        $this->createdAt = new DateTime("now");
     }
 
     #[ORM\PreUpdate]
     public function onPreUpdate(): void
     {
-        $this->updatedAt = new \DateTime("now");
+        $this->updatedAt = new DateTime("now");
     }
 
     /**
