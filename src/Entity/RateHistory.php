@@ -25,7 +25,7 @@ class RateHistory
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private DateTimeInterface $datetime;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

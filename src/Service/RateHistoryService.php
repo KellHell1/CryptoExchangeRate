@@ -24,7 +24,7 @@ class RateHistoryService
     }
 
 
-    private function sendRequest($url, $options, $method = 'GET'): array
+    private function sendRequest(string $url, array $options, string $method = 'GET'): array
     {
         try {
             $response = $this->client->request(
