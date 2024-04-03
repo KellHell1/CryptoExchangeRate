@@ -52,10 +52,7 @@ class RateHistoryService
 
     public function saveRateHistory(CurrencyPair $currencyPair, array $response): RateHistory
     {
-        $rateHistory = new RateHistory();
-
-        $rateHistory->setRate($response['rate']);
-        $rateHistory->setCurrencyPair($currencyPair);
+        $rateHistory = new RateHistory($currencyPair, $response['rate']);
 
         $this->entityManager->persist($rateHistory);
         $this->entityManager->flush();

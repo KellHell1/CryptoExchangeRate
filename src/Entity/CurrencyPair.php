@@ -35,8 +35,13 @@ class CurrencyPair
     #[ORM\OneToMany(mappedBy: 'currencyPair', targetEntity: RateHistory::class, orphanRemoval: true)]
     private Collection $rateHistories;
 
-    public function __construct()
+    public function __construct(
+        Currency $currencyFrom,
+        Currency $currencyTo,
+    )
     {
+        $this->currencyFrom = $currencyFrom;
+        $this->currencyTo = $currencyTo;
         $this->rateHistories = new ArrayCollection();
     }
 
@@ -50,23 +55,9 @@ class CurrencyPair
         return $this->currencyFrom;
     }
 
-    public function setCurrencyFrom(Currency $currencyFrom): self
-    {
-        $this->currencyFrom = $currencyFrom;
-
-        return $this;
-    }
-
     public function getCurrencyTo(): Currency
     {
         return $this->currencyTo;
-    }
-
-    public function setCurrencyTo(Currency $currencyTo): self
-    {
-        $this->currencyTo = $currencyTo;
-
-        return $this;
     }
 
     public function getCreatedAt(): DateTime

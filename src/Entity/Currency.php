@@ -31,8 +31,13 @@ class Currency
     #[ORM\OneToMany(mappedBy: 'currencyFrom', targetEntity: CurrencyPair::class, orphanRemoval: true)]
     private Collection $currencyPairs;
 
-    public function __construct()
+    public function __construct(
+        $code,
+        $title,
+    )
     {
+        $this->title = $title;
+        $this->code = $code;
         $this->currencyPairs = new ArrayCollection();
     }
 
@@ -41,23 +46,9 @@ class Currency
         return $this->title;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     public function getCode(): string
     {
         return $this->code;
-    }
-
-    public function setCode(string $code): self
-    {
-        $this->code = $code;
-
-        return $this;
     }
 
     public function getCreatedAt(): DateTime
