@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\CurrencyPair;
 use App\Entity\RateHistory;
+use App\Repository\RateHistoryRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -16,6 +17,7 @@ class RateHistoryService
 
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private RateHistoryRepository $rateHistoryRepository,
         private HttpClientInterface $client,
         private string $getRateUrl,
         private string $apiKey,
@@ -24,11 +26,11 @@ class RateHistoryService
     }
 
 
-    private function sendRequest(string $url, array $options, string $method = 'GET'): array
+    private function sendRequest(string $url, array $options): array
     {
         try {
             $response = $this->client->request(
-                $method,
+                'GET',
                 $url,
                 $options
             );
@@ -72,7 +74,7 @@ class RateHistoryService
             ?? throw new NotFoundHttpException();
 
         $history = [];
-        $rateHistory = $this->entityManager->getRepository(RateHistory::class)->findByDateTimeRangeAndPair($currencyPair, $dateFrom, $dateTo);
+        $rateHistory = $this->rateHistoryRepository->findByDateTimeRangeAndPair($currencyPair, $dateFrom, $dateTo);
 
         foreach ($rateHistory as $item) {
             // для графика важно день+час, убрал минуты с секундами

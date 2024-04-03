@@ -79,13 +79,6 @@ class CurrencyPair
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
@@ -111,18 +104,6 @@ class CurrencyPair
         if (!$this->rateHistories->contains($rateHistory)) {
             $this->rateHistories->add($rateHistory);
             $rateHistory->setCurrencyPair($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRateHistory(RateHistory $rateHistory): self
-    {
-        if ($this->rateHistories->removeElement($rateHistory)) {
-            // set the owning side to null (unless already changed)
-            if ($rateHistory->getCurrencyPair() === $this) {
-                $rateHistory->setCurrencyPair(null);
-            }
         }
 
         return $this;
