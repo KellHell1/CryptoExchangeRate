@@ -27,6 +27,15 @@ class RateHistory
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private DateTimeInterface $datetime;
 
+    public function __construct(
+        CurrencyPair $currencyPair,
+        float        $rate,
+    )
+    {
+        $this->currencyPair = $currencyPair;
+        $this->rate = $rate;
+    }
+
     public function getId(): int
     {
         return $this->id;
