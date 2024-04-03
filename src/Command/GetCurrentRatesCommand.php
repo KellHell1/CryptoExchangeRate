@@ -34,12 +34,12 @@ class GetCurrentRatesCommand extends Command
         foreach ($pairs as $pair) {
             // в идеале в очереди вынести, так как крона будет часто работать, а пар может быть много
             try {
-                $rate = $this->rateHistoryService->getRateByApi($pair);
+                $response = $this->rateHistoryService->getRateByApi($pair);
 
                 $io->text('From ' . $pair->getCurrencyFrom()->getCode() . ' to ' . $pair->getCurrencyTo()->getCode());
 
                 if (!empty($rate)) {
-                    $rateHistory = $this->rateHistoryService->saveRateHistory($pair, $rate);
+                    $rateHistory = $this->rateHistoryService->saveRateHistory($pair, $response);
                     $io->text('Current rate is ===== ' . $rateHistory->getRate());
                 } else {
                     $io->text('Got empty result from API ===> check the logs');
