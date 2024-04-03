@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\RateHistoryRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RateHistoryRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class RateHistory
 {
     #[ORM\Id]
@@ -59,10 +61,9 @@ class RateHistory
         return $this->datetime;
     }
 
-    public function setDatetime(DateTimeInterface $datetime): self
+    #[ORM\PrePersist]
+    public function onPrePersist(): void
     {
-        $this->datetime = $datetime;
-
-        return $this;
+        $this->datetime = new DateTime("now");
     }
 }

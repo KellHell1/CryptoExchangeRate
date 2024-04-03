@@ -57,9 +57,6 @@ class RateHistoryService
         $rateHistory->setRate($response['rate']);
         $rateHistory->setCurrencyPair($currencyPair);
 
-        $dateTime = new DateTime($response['time']);
-        $rateHistory->setDatetime($dateTime);
-
         $this->entityManager->persist($rateHistory);
         $this->entityManager->flush();
 
